@@ -12,32 +12,30 @@ export default function adapt (colourRef, illuminantDRef, illuminantSRef) {
     : convert('lms', getIlluminant('D65'))
 
   // Bradford Transformation
-  let Mb = getTransform('BRADFORD')
+  const Mb = getTransform('BRADFORD')
 
   // Inverse Bradford Transformation
-  let Mbi = getTransform('INVERSE_BRADFORD')
+  const Mbi = getTransform('INVERSE_BRADFORD')
 
   // Illuminant Ratio Matrix
-  let Mir = [
+  const Mir = [
     [ illuminantD.rho / illuminantS.rho, 0, 0 ],
     [ 0, illuminantD.gamma / illuminantS.gamma, 0 ],
     [ 0, 0, illuminantD.beta / illuminantS.beta ]
   ]
 
   // Illuminant ratio matrix, pre-inversion
-  let MbiMir = matrixMultiply(Mbi, Mir)
+  const MbiMir = matrixMultiply(Mbi, Mir)
 
   // Illuminant ratio matrix
-  let M = matrixMultiply(MbiMir, Mb)
+  const M = matrixMultiply(MbiMir, Mb)
 
-  let valueArray = [ [ colour.X ], [ colour.Y ], [ colour.Z ] ]
-  let resultArray = matrixMultiply(M, valueArray)
+  const valueArray = [ [ colour.X ], [ colour.Y ], [ colour.Z ] ]
+  const resultArray = matrixMultiply(M, valueArray)
 
-  let result = {
+  return makeColourObject({
     X: resultArray[0][0],
     Y: resultArray[1][0],
     Z: resultArray[2][0]
-  }
-
-  return makeColourObject(result)
+  })
 }

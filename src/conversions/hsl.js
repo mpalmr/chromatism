@@ -3,14 +3,14 @@ import negativeModulo from '../helpers/negative-modulo'
 export default {
   rgb: value => {
     if (value.s == 0) {
-      var grey = (value.l / 100) * 255
+      const grey = (value.l / 100) * 255
       return {
         r: grey,
         g: grey,
         b: grey
       }
     } else {
-      var tempOne, tempTwo, tempHue
+      let tempOne, tempTwo, tempHue
       if (value.l >= 50) {
         tempOne = ((value.l / 100) + (value.s / 100)) - ((value.l / 100) * (value.s / 100))
       } else {
@@ -18,10 +18,10 @@ export default {
       }
       tempTwo = (2 * (value.l / 100)) - tempOne
       tempHue = value.h / 360
-      var tempR = (tempHue + 0.333) % 1
-      var tempG = tempHue
-      var tempB = negativeModulo((tempHue - 0.333), 1)
-      var r, g, b
+      const tempR = (tempHue + 0.333) % 1
+      const tempG = tempHue
+      const tempB = negativeModulo((tempHue - 0.333), 1)
+      let r, g, b
       if ((6 * tempR) < 1) {
         r = tempTwo + ((tempOne - tempTwo) * 6 * tempR)
       } else if ((2 * tempR) < 1) {
@@ -73,11 +73,11 @@ export default {
       s: value.s / 100,
       l: value.l / 100
     })
-    var i = normalized.s * (normalized.l < 0.5 ? normalized.l : 1 - normalized.l)
+    const i = normalized.s * (normalized.l < 0.5 ? normalized.l : 1 - normalized.l)
 
-    var h = normalized.h
-    var s = 2 * i / (normalized.l + i)
-    var v = normalized.l + i
+    const h = normalized.h
+    const s = 2 * i / (normalized.l + i)
+    const v = normalized.l + i
 
     return { h: h, s: s * 100, v: v * 100 }
   }

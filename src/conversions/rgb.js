@@ -10,12 +10,12 @@ const {
 } = fromXYZ
 
 const hsl = value => {
-  var r = value['r'] / 255
-  var g = value['g'] / 255
-  var b = value['b'] / 255
-  var rgbOrdered = [ r, g, b ].sort()
-  var l = ((rgbOrdered[0] + rgbOrdered[2]) / 2) * 100
-  var s, h
+  const r = value['r'] / 255
+  const g = value['g'] / 255
+  const b = value['b'] / 255
+  const rgbOrdered = [ r, g, b ].sort()
+  const l = ((rgbOrdered[0] + rgbOrdered[2]) / 2) * 100
+  let s, h
   if (rgbOrdered[0] == rgbOrdered[2]) {
     s = 0
     h = 0
@@ -49,9 +49,9 @@ const hsl = value => {
 const cieluv = value => fromXYZTocieluv(XYZ(value))
 
 const XYZ = value => {
-  let normalized = [ value.r, value.g, value.b ].map((v) => v / 255)
+  const normalized = [ value.r, value.g, value.b ].map((v) => v / 255)
 
-  let linear = normalized.map((V) => {
+  const linear = normalized.map((V) => {
     if (V <= 0.04045) {
       return V / 12.92
     }
@@ -62,9 +62,9 @@ const XYZ = value => {
    // Whitepoint is D65
    // sRGB standard stuff eh!
    // [ Shamelessly stolen off Wikipedia ]
-  let M = getTransform('SRGB_XYZ')
+  const M = getTransform('SRGB_XYZ')
 
-  let [ X, Y, Z ] = M.map((m) => {
+  const [ X, Y, Z ] = M.map((m) => {
     return linear.reduce((acc, v, key) => {
       return (m[key] * v) + acc
     }, 0)
@@ -75,15 +75,15 @@ const XYZ = value => {
 
 export default {
   hex: value => {
-    var r = Math.round(value['r']).toString(16)
+    let r = Math.round(value['r']).toString(16)
     if (r.length == 1) {
       r = '0' + r
     }
-    var g = Math.round(value['g']).toString(16)
+    let g = Math.round(value['g']).toString(16)
     if (g.length == 1) {
       g = '0' + g
     }
-    var b = Math.round(value['b']).toString(16)
+    let b = Math.round(value['b']).toString(16)
     if (b.length == 1) {
       b = '0' + b
     }
@@ -95,15 +95,15 @@ export default {
   hsl,
 
   csshsl: value => {
-    var { h, s, l } = hsl(value)
+    const { h, s, l } = hsl(value)
     return 'hsl(' + Math.round(h) + ',' + Math.round(s) + '%,' + Math.round(l) + '%)'
   },
 
   cmyk: value => {
-    var tempR = value['r'] / 255
-    var tempG = value['g'] / 255
-    var tempB = value['b'] / 255
-    var k = 1 - (Math.max(tempR, tempG, tempB))
+    const tempR = value['r'] / 255
+    const tempG = value['g'] / 255
+    const tempB = value['b'] / 255
+    const k = 1 - (Math.max(tempR, tempG, tempB))
     if (k != 1) {
       return {
         c: ((1 - tempR) - k) / (1 - k),
@@ -122,16 +122,16 @@ export default {
   },
 
   hsv: value => {
-    var r = (value.r / 255)
-    var g = (value.g / 255)
-    var b = (value.b / 255)
+    let r = (value.r / 255)
+    let g = (value.g / 255)
+    let b = (value.b / 255)
 
-    var min = Math.min(r, g, b)
-    var max = Math.max(r, g, b)
-    var maxDelta = max - min
+    const min = Math.min(r, g, b)
+    const max = Math.max(r, g, b)
+    const maxDelta = max - min
 
-    var v = max
-    var h, s
+    const v = max
+    let h, s
 
     if (maxDelta == 0) {
       h = 0
@@ -139,15 +139,15 @@ export default {
     } else {
       s = maxDelta / max
 
-      var rDelta = (((max - r) / 6) + (maxDelta / 2)) / maxDelta
-      var gDelta = (((max - g) / 6) + (maxDelta / 2)) / maxDelta
-      var bDelta = (((max - b) / 6) + (maxDelta / 2)) / maxDelta
+      const rDelta = (((max - r) / 6) + (maxDelta / 2)) / maxDelta
+      const gDelta = (((max - g) / 6) + (maxDelta / 2)) / maxDelta
+      const bDelta = (((max - b) / 6) + (maxDelta / 2)) / maxDelta
 
       if (r == max) {
         h = bDelta - gDelta
-      }			else if (g == max) {
+      } else if (g == max) {
         h = (1 / 3) + rDelta - bDelta
-      }			else if (b == max) {
+      } else if (b == max) {
         h = (2 / 3) + gDelta - rDelta
       }
 
@@ -162,9 +162,9 @@ export default {
   },
 
   yiq: value => {
-    var y = (0.299 * (value.r / 255)) + (0.587 * (value.g / 255)) + (0.114 * (value.b / 255))
-    var i = (0.596 * (value.r / 255)) + (-0.274 * (value.g / 255)) + (-0.322 * (value.b / 255))
-    var q = (0.211 * (value.r / 255)) + (-0.523 * (value.g / 255)) + (0.312 * (value.b / 255))
+    const y = (0.299 * (value.r / 255)) + (0.587 * (value.g / 255)) + (0.114 * (value.b / 255))
+    let i = (0.596 * (value.r / 255)) + (-0.274 * (value.g / 255)) + (-0.322 * (value.b / 255))
+    let q = (0.211 * (value.r / 255)) + (-0.523 * (value.g / 255)) + (0.312 * (value.b / 255))
       /* YIQ is not a transformation of RGB, so it's pretty lossy */
     i = bounded(i, [ -0.5957, 0.5957 ])
     q = bounded(q, [ -0.5226, 0.5226 ])

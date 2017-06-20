@@ -2,7 +2,7 @@ import makeColourObject from './convert'
 import convert from '../helpers/convert-to-type'
 
 export default function brightness (shift, colourRef) {
-  var colour = convert('hsl', colourRef)
+  const colour = convert('hsl', colourRef)
 
   colour.l += shift
   if (colour.l < 0) {

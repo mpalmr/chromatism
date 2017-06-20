@@ -1,22 +1,22 @@
 export default {
   rgb: value => {
-    var r, g, b
+    let r, g, b
     const normalized = Object.assign({}, value, {
       h: value.h / 360,
       s: value.s / 100,
       v: value.v / 100
     })
 
-    var hsix = normalized.h * 6
+    let hsix = normalized.h * 6
     if (hsix == 6) {
       hsix = 0
     }
-    var i = Math.round(hsix)
-    var var_1 = normalized.v * (1 - normalized.s)
-    var var_2 = normalized.v * (1 - normalized.s * (hsix - i))
-    var var_3 = normalized.v * (1 - normalized.s * (1 - (hsix - i)))
+    const i = Math.round(hsix)
+    const var_1 = normalized.v * (1 - normalized.s)
+    const var_2 = normalized.v * (1 - normalized.s * (hsix - i))
+    const var_3 = normalized.v * (1 - normalized.s * (1 - (hsix - i)))
 
-    var r2, g2, b2
+    let r2, g2, b2
 
     if (i == 0) {
       r2 = normalized.v
@@ -58,14 +58,14 @@ export default {
       v: value.v / 100
     })
 
-    var h = normalized.h
-    var s
+    const h = normalized.h
+    let s
     if ((2 - normalized.s) * normalized.v < 1) {
       s = normalized.s * normalized.v / ((2 - normalized.s) * normalized.v)
     } else {
       s = normalized.s * normalized.v / (2 - (2 - normalized.s) * normalized.v)
     }
-    var l = ((2 - normalized.s) * normalized.v) / 2
+    const l = ((2 - normalized.s) * normalized.v) / 2
     return { h: h * 360, s: s * 100, l: l * 100 }
   }
 }

@@ -9,21 +9,21 @@ const white = getIlluminant('D65')
 
 export default {
   rgb: value => {
-    let normalized = [ value.X, value.Y, value.Z ].map((v) => v / 100)
+    const normalized = [ value.X, value.Y, value.Z ].map((v) => v / 100)
 
       // Observer is 2°
       // Whitepoint is D65
       // sRGB standard stuff eh!
       // [ Shamelessly stolen off Wikipedia ]
-    let M = getTransform('INVERSE_SRGB_XYZ')
+    const M = getTransform('INVERSE_SRGB_XYZ')
 
-    let linear = M.map((m) => {
+    const linear = M.map((m) => {
       return normalized.reduce((acc, v, key) => {
         return (m[key] * v) + acc
       }, 0)
     })
 
-    let [ r, g, b ] = linear.map((C) => {
+    const [ r, g, b ] = linear.map((C) => {
       if (C <= 0.0031308) {
         return C * 12.92
       }
@@ -34,12 +34,12 @@ export default {
   },
 
   lms: value => {
-    let valueArray = [ value.X, value.Y, value.Z ].map((x) => x / 100)
+    const valueArray = [ value.X, value.Y, value.Z ].map((x) => x / 100)
 
-      // Bradford Transformation
-    let Mb = getTransform('BRADFORD')
+    // Bradford Transformation
+    const Mb = getTransform('BRADFORD')
 
-    let resultArray = Mb.map((m) => {
+    const resultArray = Mb.map((m) => {
       return valueArray.reduce((acc, v, key) => {
         return (m[key] * v) + acc
       }, 0)
@@ -58,7 +58,9 @@ export default {
     const Zr = value.Z / white.Z
 
     const toF = (x) => x > epsilon ? cubeRoot(x) : (kappa * x + 16) / 116
-    const Fx = toF(Xr), Fy = toF(Yr), Fz = toF(Zr)
+    const Fx = toF(Xr)
+    const Fy = toF(Yr)
+    const Fz = toF(Zr)
 
     return {
       L: ((116 * Fy) - 16),

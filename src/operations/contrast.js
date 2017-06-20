@@ -2,7 +2,7 @@ import makeColourObject from './convert'
 import convert from '../helpers/convert-to-type'
 
 export default function contrast (shift, colourRef) {
-  var colour = convert('rgb', colourRef)
+  const colour = convert('rgb', colourRef)
 
   colour.r = (((((colour.r / 255.0) - 0.5) * shift) + 0.5) * 255.0)
   if (colour.r < 0) {
